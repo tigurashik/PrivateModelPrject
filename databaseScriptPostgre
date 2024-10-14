@@ -1,0 +1,50 @@
+CREATE TABLE Служащий (
+    ID_служащего SERIAL PRIMARY KEY,
+    Имя TEXT NOT NULL,
+    Адрес TEXT,
+    Способ_оплаты TEXT,
+    Ставка TEXT,
+    Тип_зарплаты TEXT
+);
+
+CREATE TABLE Администратор (
+    ID_администратора SERIAL PRIMARY KEY,
+    Имя TEXT NOT NULL,
+    Права_доступа TEXT
+);
+
+CREATE TABLE Заказ (
+    ID_заказа SERIAL PRIMARY KEY,
+    Объем_продаж NUMERIC(10, 2),
+    Дата DATE,
+    Служащий_ID INT REFERENCES Служащий(ID_служащего)
+);
+
+CREATE TABLE Зарплата (
+    ID_зарплаты SERIAL PRIMARY KEY,
+    Дата_начисления DATE,
+    Служащий_ID INT REFERENCES Служащий(ID_служащего),
+    Сумма NUMERIC(10, 2)
+);
+
+CREATE TABLE Комиссия (
+    ID_комиссии SERIAL PRIMARY KEY,
+    Процент NUMERIC(5, 2),
+    Объем_продаж NUMERIC(10, 2),
+    Служащий_ID INT REFERENCES Служащий(ID_служащего)
+);
+
+CREATE TABLE Учет_рабочего_времени (
+    ID_учета SERIAL PRIMARY KEY,
+    Дата DATE,
+    Количество_часов INT,
+    Тариф NUMERIC(10, 2),
+    Служащий_ID INT REFERENCES Служащий(ID_служащего)
+);
+
+CREATE TABLE Отпуск (
+    ID_отпуска SERIAL PRIMARY KEY,
+    Дата_начала DATE,
+    Количество_дней INT,
+    Служащий_ID INT REFERENCES Служащий(ID_служащего)
+);
