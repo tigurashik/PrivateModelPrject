@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% block title %}Зарплаты{% endblock %}
+
+{% block content %}
+<h1>Зарплаты</h1>
+
+<!-- Карточки с общей суммой выплат для каждого служащего -->
+<h5>Общая сумма выплат:</h5>
+<div class="row">
+    {% for total in total_salaries %}
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">{{ total[1] }}</h5>
+                <p class="card-text">
+                    <strong>ID Служащего:</strong> {{ total[0] }}<br>
+                    <strong>Общая сумма выплат:</strong> {{ total[2] }}
+                </p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Кнопка для открытия формы добавления зарплаты -->
+<button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#addSalaryModal">
+    Добавить зарплату
+</button>
+<h5>Последние начиления:</h5>
+
+<!-- Карточки зарплат -->
+<div class="container">
+    {% for salary in salaries %}
+    <div class="card mb-3" style="width: 100%;">
+        <div class="card-body">
+            <h5 class="card-title">{{ salary[1] }}</h5>
+            <p class="card-text">
+                <strong>ID Служащего:</strong> {{ salary[2] }}<br>
+                <strong>Дата начисления:</strong> {{ salary[3] }}<br>
+                <strong>Сумма:</strong> {{ salary[4] }}
+            </p>
+            <a href="{{ url_for('delete_salary', id=salary[0]) }}" class="btn btn-danger">Удалить запись</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Модальное окно для добавления зарплаты -->
+<div class="modal fade" id="addSalaryModal" tabindex="-1" role="dialog" aria-labelledby="addSalaryModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <form method="post" action="{{ url_for('show_salary') }}">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addSalaryModalLabel">Добавить запись о зарплате</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Закрыть">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label for="employee_id">Служащий</label>
+                <select class="form-control" id="employee_id" name="employee_id" required>
+                    {% for emp in employees %}
+                    <option value="{{ emp[0] }}">{{ emp[1] }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="accrual_date">Дата начисления</label>
+                <input type="date" class="form-control" id="accrual_date" name="accrual_date" required>
+            </div>
+            <div class="form-group">
+                <label for="amount">Сумма</label>
+                <input type="number" step="0.01" class="form-control" id="amount" name="amount" required>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+          <button type="submit" class="btn btn-primary">Добавить запись</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

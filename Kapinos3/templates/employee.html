@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block title %}Служащие{% endblock %}
+
+{% block content %}
+<h1>Служащие</h1>
+
+<!-- Кнопка для открытия формы добавления служащего -->
+<button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#addEmployeeModal">
+    Добавить служащего
+</button>
+
+<!-- Карточки служащих -->
+<div class="row">
+    {% for emp in employees %}
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">{{ emp[1] }}</h5>
+                <p class="card-text">
+                    <strong>Адрес:</strong> {{ emp[2] }}<br>
+                    <strong>Способ оплаты:</strong> {{ emp[3] }}<br>
+                    <strong>Ставка:</strong> {{ emp[4] }}<br>
+                    <strong>Тип зарплаты:</strong> {{ emp[5] }}
+                </p>
+                <a href="{{ url_for('delete_employee', id=emp[0]) }}" class="btn btn-danger">Удалить</a>
+                <!-- Кнопка для назначения администратором -->
+                <a href="{{ url_for('promote_employee', id=emp[0]) }}" class="btn btn-warning">
+                    <span style="color: gold;">&#9733;</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Модальное окно для добавления служащего -->
+<div class="modal fade" id="addEmployeeModal" tabindex="-1" role="dialog" aria-labelledby="addEmployeeModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <form method="post" action="{{ url_for('show_employee') }}">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addEmployeeModalLabel">Добавить служащего</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Закрыть">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label for="name">Имя</label>
+                <input type="text" class="form-control" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="address">Адрес</label>
+                <input type="text" class="form-control" id="address" name="address">
+            </div>
+            <div class="form-group">
+                <label for="payment_method">Способ оплаты</label>
+                <input type="text" class="form-control" id="payment_method" name="payment_method">
+            </div>
+            <div class="form-group">
+                <label for="rate">Ставка</label>
+                <input type="text" class="form-control" id="rate" name="rate">
+            </div>
+            <div class="form-group">
+                <label for="salary_type">Тип зарплаты</label>
+                <input type="text" class="form-control" id="salary_type" name="salary_type">
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+          <button type="submit" class="btn btn-primary">Добавить</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

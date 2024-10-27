@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block title %}Отпуска{% endblock %}
+
+{% block content %}
+<h1>Отпуска</h1>
+
+<!-- Карточки отпусков -->
+<div class="row">
+    {% for leave in leaves %}
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">{{ leave[1] }}</h5>
+                <p class="card-text">
+                    <strong>Оставшиеся дни отпуска:</strong> {{ leave[2] }}
+                </p>
+                <!-- Кнопка для запроса отпуска -->
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#requestLeaveModal{{ leave[0] }}">
+                    Отпуск
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно для запроса отпуска -->
+    <div class="modal fade" id="requestLeaveModal{{ leave[0] }}" tabindex="-1" role="dialog" aria-labelledby="requestLeaveModalLabel{{ leave[0] }}" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <form method="post" action="{{ url_for('show_leave') }}">
+            <div class="modal-header">
+              <h5 class="modal-title" id="requestLeaveModalLabel{{ leave[0] }}">Запросить отпуск для {{ leave[1] }}</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Закрыть">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" name="employee_id" value="{{ leave[0] }}">
+                <div class="form-group">
+                    <label for="start_date{{ leave[0] }}">Дата начала отпуска</label>
+                    <input type="date" class="form-control" id="start_date{{ leave[0] }}" name="start_date" required>
+                </div>
+                <div class="form-group">
+                    <label for="number_of_days{{ leave[0] }}">Количество дней отпуска</label>
+                    <input type="number" class="form-control" id="number_of_days{{ leave[0] }}" name="number_of_days" min="1" max="{{ leave[2] }}" required>
+                </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+              <button type="submit" class="btn btn-primary">Запросить отпуск</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    {% endfor %}
+</div>
+
+{% endblock %}

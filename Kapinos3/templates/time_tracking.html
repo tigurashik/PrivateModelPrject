@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block title %}Учет рабочего времени{% endblock %}
+
+{% block content %}
+<h1>Учет рабочего времени</h1>
+
+<!-- Кнопка для открытия формы добавления записи -->
+<button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#addTimeTrackingModal">
+    Добавить запись
+</button>
+
+<!-- Карточки учета рабочего времени -->
+<div class="container">
+    {% for tt in time_trackings %}
+    <div class="card mb-3" style="width: 100%;">
+        <div class="card-body">
+            <h5 class="card-title">{{ tt[4] }}</h5>
+            <p class="card-text">
+                <strong>Дата:</strong> {{ tt[1] }}<br>
+                <strong>Количество часов:</strong> {{ tt[2] }}<br>
+                <strong>Ставка:</strong> {{ tt[3] }}
+            </p>
+            <a href="{{ url_for('delete_time_tracking', id=tt[0]) }}" class="btn btn-danger">Удалить запись</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Модальное окно для добавления записи учета рабочего времени -->
+<div class="modal fade" id="addTimeTrackingModal" tabindex="-1" role="dialog" aria-labelledby="addTimeTrackingModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <form method="post" action="{{ url_for('show_time_tracking') }}">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addTimeTrackingModalLabel">Добавить запись учета рабочего времени</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Закрыть">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label for="employee_id">Служащий</label>
+                <select class="form-control" id="employee_id" name="employee_id" required>
+                    {% for emp in employees %}
+                    <option value="{{ emp[0] }}">{{ emp[1] }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="date">Дата</label>
+                <input type="date" class="form-control" id="date" name="date" required>
+            </div>
+            <div class="form-group">
+                <label for="hours_worked">Количество часов</label>
+                <input type="number" class="form-control" id="hours_worked" name="hours_worked" required>
+            </div>
+            <div class="form-group">
+                <label for="rate">Ставка</label>
+                <input type="number" step="0.01" class="form-control" id="rate" name="rate" required>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+          <button type="submit" class="btn btn-primary">Добавить запись</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

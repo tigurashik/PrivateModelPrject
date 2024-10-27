@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block title %}Заказы{% endblock %}
+
+{% block content %}
+<h1>Заказы</h1>
+
+<!-- Кнопка для открытия формы добавления заказа -->
+<button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#addOrderModal">
+    Новый заказ
+</button>
+
+<!-- Карточки заказов -->
+<div class="container">
+    {% for order in orders %}
+    <div class="card mb-3" style="width: 100%;">
+        <div class="card-body">
+            <h5 class="card-title">Заказ №{{ order[0] }}</h5>
+            <p class="card-text">
+                <strong>Служащий:</strong> {{ order[1] }}<br>
+                <strong>Объем продаж:</strong> {{ order[2] }}<br>
+                <strong>Дата:</strong> {{ order[3] }}
+            </p>
+            <a href="{{ url_for('delete_order', id=order[0]) }}" class="btn btn-danger">Удалить заказ</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Модальное окно для добавления заказа -->
+<div class="modal fade" id="addOrderModal" tabindex="-1" role="dialog" aria-labelledby="addOrderModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <form method="post" action="{{ url_for('show_orders') }}">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addOrderModalLabel">Добавить новый заказ</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Закрыть">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label for="employee_id">Служащий</label>
+                <select class="form-control" id="employee_id" name="employee_id" required>
+                    {% for emp in employees %}
+                    <option value="{{ emp[0] }}">{{ emp[1] }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="sales_volume">Объем продаж</label>
+                <input type="number" step="0.01" class="form-control" id="sales_volume" name="sales_volume" required>
+            </div>
+            <div class="form-group">
+                <label for="date">Дата</label>
+                <input type="date" class="form-control" id="date" name="date" required>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+          <button type="submit" class="btn btn-primary">Добавить заказ</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}Администраторы{% endblock %}
+
+{% block content %}
+<h1>Администраторы</h1>
+
+<!-- Карточки администраторов -->
+<div class="container">
+    {% for admin in administrators %}
+    <div class="card mb-3" style="width: 100%;">
+        <div class="card-body">
+            <h5 class="card-title">{{ admin[1] }}</h5>
+            <p class="card-text">
+                <strong>Уровень доступа:</strong> {{ admin[2] }}<br>
+                <strong>Пароль:</strong> {{ admin[3] }}
+            </p>
+            <!-- Кнопка для удаления администратора -->
+            <a href="{{ url_for('delete_administrator', id=admin[0]) }}" class="btn btn-danger">
+                <span>&#10060;</span>
+            </a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

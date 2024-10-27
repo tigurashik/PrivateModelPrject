@@ -1,0 +1,24 @@
+/* Пример пользовательских стилей */
+body {
+    padding-top: 60px;
+}
+
+.card-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+.card-text {
+    font-size: 0.9rem;
+}
+
+/* Стиль для карточек */
+.card {
+    width: 100%;
+}
+
+/* Стиль для золотой звездочки */
+.btn-warning {
+    background-color: transparent;
+    border: none;
+}
